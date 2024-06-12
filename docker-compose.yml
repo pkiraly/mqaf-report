@@ -1,0 +1,10 @@
+services:
+  app:
+    build:
+      context: "."
+    ports:
+      - "${WEBPORT:-80}:80"
+      - "${SOLRPORT:-8983}:8983"
+    volumes:
+      - "${CONFIG:-./config}:/var/www/html/config"
+      - "${OUTPUT:-./output}:/var/www/html/metadata-qa"
