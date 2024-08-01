@@ -4,9 +4,8 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "post-install-cmd": [
-      "mkdir -p cache libs images _smarty/templates_c _smarty/cache || true",
-      "[ -f cache/selected-facets.js ] || touch cache/selected-facets.js",
-      "chmod g+w -R _smarty cache || true",
+      "mkdir -p images _smarty/templates_c _smarty/cache || true",
+      "chmod g+w -R _smarty || true",
       "# you may need to execute <comment>sudo chgrp www-data -R _smarty cache</comment>"
     ],
     "translate": [
