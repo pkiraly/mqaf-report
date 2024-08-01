@@ -1,6 +1,8 @@
 <h3>{$count} records</h3>
 {include 'common/data-source-statistics.tpl'}
 
+{include 'overview/schemaConfiguration.tpl'}
+
 <p>average score: <strong>{sprintf("%.2f", $totalScore)}</strong> (not measured: {$notMeasured} records)</p>
 <table class="values">
   <caption>score distribution</caption>

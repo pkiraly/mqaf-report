@@ -49,7 +49,7 @@
     </div>
 
     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-      <label class="label label-info" for="providers">{_('data provider')}}</label><br>
+      <label class="label label-info" for="providers">{_('data provider')}</label><br>
       <select id="providers" name="provider_id" style="width: 300px;">
         <option value="">all</option>
         {foreach $providers as $id => $provider}

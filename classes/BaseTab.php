@@ -18,6 +18,8 @@ abstract class BaseTab implements Tab {
   protected $provider_id;
   protected $count;
   protected $parameters = [];
+  protected $measurements;
+  protected $schemaConfiguration;
 
   public function __construct() {
     $this->configuration = parse_ini_file("configuration.cnf", false, INI_SCANNER_TYPED);
@@ -36,6 +38,7 @@ abstract class BaseTab implements Tab {
     } else {
       $this->db = new IssuesDB($this->outputDir);
     }
+    $this->processInputParameters();
   }
 
   public function prepareData(Smarty &$smarty) {
@@ -93,6 +96,8 @@ abstract class BaseTab implements Tab {
     $this->provider_id = $provider_id == '' ? 'NA' : $provider_id;
     $this->count = $this->db->fetchValue($this->db->getCount($this->schema, $this->provider_id, $this->set_id), 'count');
     $smarty->assign('count', $this->count);
+
+    $smarty->assign('schemaConfiguration', $this->schemaConfiguration);
   }
 
   protected function getDir() {
@@ -140,6 +145,27 @@ abstract class BaseTab implements Tab {
       }
     }
     return $factors;
+  }
+
+  /**
+   * Process the input-parameters.json.
+   * It fills the measurements, and schemaConfiguration fields
+   * @return void
+   */
+  protected function processInputParameters(): void {
+    $inputParameters = json_decode(file_get_contents($this->inputDir . '/input-parameters.json'));
+    $measurementsFile = $this->inputDir . '/' . $inputParameters->measurements;
+    if (file_exists($measurementsFile)) {
+      $this->measurements = json_decode(file_get_contents($measurementsFile));
+    }
+    $schemaFile = $this->inputDir . '/' . $inputParameters->schema;
+    if (file_exists($schemaFile)) {
+      if (preg_match('/\.json$/', $schemaFile))
+        $this->schemaConfiguration = json_decode(file_get_contents($schemaFile));
+      elseif (preg_match('/\.ya?ml/', $schemaFile)) {
+        $this->schemaConfiguration = yaml_parse_file($schemaFile);
+      }
+    }
   }
 
   private function getFactors2($lang) {
