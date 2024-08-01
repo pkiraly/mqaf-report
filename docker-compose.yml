@@ -1,10 +1,38 @@
 services:
+  database:
+    image: mysql:latest
+    ports:
+      - "3307:3306"
+    command: --init-file /data/application/init.sql
+    volumes:
+      - ./init.sql:/data/application/init.sql
+      - ./mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: mqaf
+      MYSQL_DATABASE: mqaf
+      MYSQL_USER: mqaf
+      MYSQL_PASSWORD: mqaf
+    container_name: ${DB_CONTAINER:-mqaf-report-db}
+    networks:
+      - mqaf
+
   app:
     build:
       context: "."
+      dockerfile: Dockerfile
     ports:
-      - "${WEBPORT:-80}:80"
+      - "${WEBPORT:-90}:80"
       - "${SOLRPORT:-8983}:8983"
     volumes:
       - "${CONFIG:-./config}:/var/www/html/config"
+      - "${INPUT:-./input}:/var/www/html/metadata-qa"
       - "${OUTPUT:-./output}:/var/www/html/metadata-qa"
+    container_name: ${CONTAINER:-mqaf-report}
+    depends_on:
+      - database
+    networks:
+      - mqaf
+
+networks:
+  mqaf:
