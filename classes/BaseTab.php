@@ -39,6 +39,7 @@ abstract class BaseTab implements Tab {
       $this->db = new IssuesDB($this->outputDir);
     }
     $this->processInputParameters();
+    $this->count = $this->readCount($this->getRootFilePath('count.csv'));
   }
 
   public function prepareData(Smarty &$smarty) {
@@ -94,7 +95,7 @@ abstract class BaseTab implements Tab {
     $this->schema = $schema == '' ? 'NA' : $schema;
     $this->set_id = $set_id == '' ? 'NA' : $set_id;
     $this->provider_id = $provider_id == '' ? 'NA' : $provider_id;
-    $this->count = $this->db->fetchValue($this->db->getCount($this->schema, $this->provider_id, $this->set_id), 'count');
+    // $this->count = $this->db->fetchValue($this->db->getCount($this->schema, $this->provider_id, $this->set_id), 'count');
     $smarty->assign('count', $this->count);
 
     $smarty->assign('schemaConfiguration', $this->schemaConfiguration);
@@ -106,6 +107,10 @@ abstract class BaseTab implements Tab {
 
   protected function getFilePath($name) {
     return sprintf('%s/%s', $this->getDir(), $name);
+  }
+
+  protected function getRootFilePath($name) {
+    return sprintf('%s/%s', $this->outputDir, $name);
   }
 
   protected function downloadFile($file, $contentType) {
@@ -214,4 +219,22 @@ abstract class BaseTab implements Tab {
     $params['lang'] = $this->lang;
     return http_build_query($params);
   }
+
+  protected function readCount($countFile = null): int {
+    if (is_null($countFile))
+      $countFile = $this->getRootFilePath('count.csv');
+    if (file_exists($countFile)) {
+      $counts = readCsv($countFile);
+      if (empty($counts)) {
+        $count = trim(file_get_contents($countFile));
+      } else {
+        $counts = $counts[0];
+        $count = isset($counts->processed) ? $counts->processed : $counts->total;
+      }
+    } else {
+      $count = 0;
+    }
+    return intval($count);
+  }
+
 }
