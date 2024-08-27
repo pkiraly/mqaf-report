@@ -20,6 +20,7 @@ abstract class BaseTab implements Tab {
   protected $parameters = [];
   protected $measurements;
   protected $schemaConfiguration;
+  protected $reportPath;
 
   public function __construct() {
     $this->configuration = parse_ini_file("configuration.cnf", false, INI_SCANNER_TYPED);
@@ -40,6 +41,9 @@ abstract class BaseTab implements Tab {
     }
     $this->processInputParameters();
     $this->count = $this->readCount($this->getRootFilePath('count.csv'));
+    $this->reportPath = $_SERVER['REQUEST_URI'];
+    if ($this->reportPath != '')
+      $this->outputDir .= $this->reportPath;
   }
 
   public function prepareData(Smarty &$smarty) {
@@ -51,6 +55,7 @@ abstract class BaseTab implements Tab {
     $smarty->assign('tab', $tab);
     $smarty->assign('subdirs', $this->subdirs);
     $smarty->assign('subdir', $this->subdir);
+    $smarty->assign('host', $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
 
     // $smarty->assign('filename', trim(file_get_contents($this->getFilePath('filename'))));
     // $smarty->assign('count', intval(trim(file_get_contents($this->getFilePath('count')))));
@@ -158,12 +163,12 @@ abstract class BaseTab implements Tab {
    * @return void
    */
   protected function processInputParameters(): void {
-    $inputParameters = json_decode(file_get_contents($this->inputDir . '/input-parameters.json'));
-    $measurementsFile = $this->inputDir . '/' . $inputParameters->measurements;
+    $inputParameters = json_decode(file_get_contents($this->outputDir . '/input-parameters.json'));
+    $measurementsFile = $this->outputDir . '/' . $inputParameters->measurements;
     if (file_exists($measurementsFile)) {
       $this->measurements = json_decode(file_get_contents($measurementsFile));
     }
-    $schemaFile = $this->inputDir . '/' . $inputParameters->schema;
+    $schemaFile = $this->outputDir . '/' . $inputParameters->schema;
     if (file_exists($schemaFile)) {
       if (preg_match('/\.json$/', $schemaFile))
         $this->schemaConfiguration = json_decode(file_get_contents($schemaFile));
@@ -235,6 +240,10 @@ abstract class BaseTab implements Tab {
       $count = 0;
     }
     return intval($count);
+  }
+
+  public function getReportPath(): string {
+    return $this->reportPath;
   }
 
 }

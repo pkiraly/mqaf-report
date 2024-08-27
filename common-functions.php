@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @param $key The URL key
+ * @param string $key The URL key
  * @param null $default_value A default value in case it is missing
  * @param array $allowed_values A list of allowed values
  * @return mixed|null

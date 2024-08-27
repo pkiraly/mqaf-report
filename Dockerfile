@@ -12,7 +12,8 @@ RUN apt-get update \
  && pecl install yaml \
  && docker-php-ext-enable yaml \
  && docker-php-ext-install gettext zip \
- && docker-php-ext-install pdo pdo_mysql
+ && docker-php-ext-install pdo pdo_mysql \
+ && a2enmod rewrite
 
 # install composer from its official Docker image
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -28,6 +29,7 @@ WORKDIR /var/www/html
 COPY composer.json .
 COPY common-functions.php .
 COPY index.php .
+COPY .htaccess .
 COPY classes classes
 COPY locale locale
 COPY js js
