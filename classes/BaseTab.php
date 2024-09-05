@@ -164,7 +164,9 @@ abstract class BaseTab implements Tab {
    */
   protected function processInputParameters(): void {
     $inputParameters = json_decode(file_get_contents($this->outputDir . '/input-parameters.json'));
+    error_log('inputParameters: ' . $inputParameters);
     $measurementsFile = $this->outputDir . '/' . $inputParameters->measurements;
+    error_log('inputParameters: ' . $inputParameters);
     if (file_exists($measurementsFile)) {
       $this->measurements = json_decode(file_get_contents($measurementsFile));
     }
@@ -175,6 +177,9 @@ abstract class BaseTab implements Tab {
       elseif (preg_match('/\.ya?ml/', $schemaFile)) {
         $this->schemaConfiguration = yaml_parse_file($schemaFile);
       }
+    } else {
+      error_log('schemaFile is not existing: ' . $schemaFile);
+      $this->schemaConfiguration = null;
     }
   }
 
