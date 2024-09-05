@@ -46,6 +46,7 @@ class Overview extends BaseTab {
       if (isset($field['rules'])) {
         $path = $field['path'];
         foreach ($field['rules'] as $rule) {
+          $rule = (array) $rule;
           $id = $rule['id'];
           unset($rule['id']);
           $rule['path'] = $path;
