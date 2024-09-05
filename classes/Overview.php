@@ -26,6 +26,7 @@ class Overview extends BaseTab {
     error_log('filePath: ' . $filePath);
     $result = readCsv($filePath, 'id');
     $smarty->assign('result', $result);
+    error_log('schemaConfiguration: ' . $this->schemaConfiguration);
     $smarty->assign('index', $this->indexSchema($this->schemaConfiguration));
 
     $smarty->assign('totalScore', ($count == 0 ? 0 : $total / $count));
