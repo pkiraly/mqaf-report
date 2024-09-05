@@ -42,6 +42,7 @@ class Overview extends BaseTab {
     $index = [];
     // return $index;
     foreach ($schema->fields as $field) {
+      $field = (array) $field;
       if (isset($field['rules'])) {
         $path = $field['path'];
         foreach ($field['rules'] as $rule) {
