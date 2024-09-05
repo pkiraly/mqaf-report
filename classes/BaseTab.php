@@ -171,6 +171,7 @@ abstract class BaseTab implements Tab {
     }
     $schemaFile = $this->outputDir . '/' . $inputParameters->schema;
     if (file_exists($schemaFile)) {
+      error_log('schemaFile is existing: ' . $schemaFile);
       if (preg_match('/\.json$/', $schemaFile))
         $this->schemaConfiguration = json_decode(file_get_contents($schemaFile));
       elseif (preg_match('/\.ya?ml/', $schemaFile)) {
