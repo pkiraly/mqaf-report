@@ -40,7 +40,8 @@ class Overview extends BaseTab {
 
   private function indexSchema($schema) {
     $index = [];
-    foreach ($schema['fields'] as $field) {
+    return $index;
+    foreach ($schema->fields as $field) {
       if (isset($field['rules'])) {
         $path = $field['path'];
         foreach ($field['rules'] as $rule) {
