@@ -164,7 +164,7 @@ abstract class BaseTab implements Tab {
    */
   protected function processInputParameters(): void {
     $inputParameters = json_decode(file_get_contents($this->outputDir . '/input-parameters.json'));
-    error_log('inputParameters: ' . $inputParameters);
+    error_log('inputParameters: ' . json_encode($inputParameters));
     $measurementsFile = $this->outputDir . '/' . $inputParameters->measurements;
     error_log('inputParameters: ' . $inputParameters);
     if (file_exists($measurementsFile)) {
