@@ -39,11 +39,12 @@ abstract class BaseTab implements Tab {
     } else {
       $this->db = new IssuesDB($this->outputDir);
     }
-    $this->processInputParameters();
-    $this->count = $this->readCount($this->getRootFilePath('count.csv'));
+
     $this->reportPath = $_SERVER['REQUEST_URI'];
     if ($this->reportPath != '')
       $this->outputDir .= $this->reportPath;
+    $this->processInputParameters();
+    $this->count = $this->readCount($this->getRootFilePath('count.csv'));
   }
 
   public function prepareData(Smarty &$smarty) {
@@ -164,16 +165,14 @@ abstract class BaseTab implements Tab {
    */
   protected function processInputParameters(): void {
     $inputParameters = json_decode(file_get_contents($this->outputDir . '/input-parameters.json'));
-    error_log('inputParameters: ' . json_encode($inputParameters));
     $measurementsFile = $this->outputDir . '/' . $inputParameters->measurements;
     if (file_exists($measurementsFile)) {
       $this->measurements = json_decode(file_get_contents($measurementsFile));
     }
     $schemaFile = $this->outputDir . '/' . $inputParameters->schema;
     if (file_exists($schemaFile)) {
-      error_log('schemaFile is existing: ' . $schemaFile);
       if (preg_match('/\.json$/', $schemaFile))
-        $this->schemaConfiguration = json_decode(file_get_contents($schemaFile));
+        $this->schemaConfiguration = json_decode(file_get_contents($schemaFile), true);
       elseif (preg_match('/\.ya?ml/', $schemaFile)) {
         $this->schemaConfiguration = yaml_parse_file($schemaFile);
       }

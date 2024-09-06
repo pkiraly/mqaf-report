@@ -23,10 +23,9 @@ class Overview extends BaseTab {
       }
     }
     $filePath = $this->getRootFilePath('shacl4bib-stat.csv');
-    error_log('filePath: ' . $filePath);
     $result = readCsv($filePath, 'id');
     $smarty->assign('result', $result);
-    error_log('schemaConfiguration: ' . json_encode($this->schemaConfiguration));
+    error_log('schemaConfiguration: ' . serialize($this->schemaConfiguration));
     $smarty->assign('index', $this->indexSchema($this->schemaConfiguration));
 
     $smarty->assign('totalScore', ($count == 0 ? 0 : $total / $count));
@@ -40,9 +39,7 @@ class Overview extends BaseTab {
 
   private function indexSchema($schema) {
     $index = [];
-    // return $index;
-    foreach ($schema->fields as $field) {
-      $field = (array) $field;
+    foreach ($schema['fields'] as $field) {
       if (isset($field['rules'])) {
         $path = $field['path'];
         foreach ($field['rules'] as $rule) {
