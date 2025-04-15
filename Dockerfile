@@ -2,9 +2,8 @@
 FROM php:8.1-apache
 
 ENV REPORT_PATH="/mqaf"
-ENV RUN_USER=nobody
-ENV RUN_GROUP=0
-
+ENV RUN_USER=www-data
+ENV RUN_GROUP=www-data
 
 # install locales, gettext, zip, yaml
 RUN apt-get update \
