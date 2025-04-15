@@ -59,8 +59,7 @@ abstract class BaseTab implements Tab {
     $smarty->assign('tab', $tab);
     $smarty->assign('subdirs', $this->subdirs);
     $smarty->assign('subdir', $this->subdir);
-    $smarty->assign('host', $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
-
+    $smarty->assign('host', $this->dockerized ? '' : $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
     // $smarty->assign('filename', trim(file_get_contents($this->getFilePath('filename'))));
     // $smarty->assign('count', intval(trim(file_get_contents($this->getFilePath('count')))));
 
