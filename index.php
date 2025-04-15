@@ -43,4 +43,9 @@ if ($ajax == 1) {
 } elseif ($controller->getOutputType() == 'html')
   $smarty->display($controller->getTemplate());
 
-error_log(json_encode($_REQUEST));
+error_log('_REQUEST: ' . json_encode($_REQUEST));
+error_log('_GET: ' . json_encode($_GET));
+error_log('_SERVER: ' . json_encode($_SERVER));
+error_log('_ENV: ' . json_encode($_ENV));
+error_log('REPORT_PATH (env): ' . getenv('REPORT_PATH'));
+

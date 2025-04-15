@@ -1,6 +1,8 @@
 # includes most required extensions
 FROM php:8.1-apache
 
+ENV REPORT_PATH="/mqaf"
+
 # install locales, gettext, zip, yaml
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
@@ -47,6 +49,7 @@ RUN sed -i.bak 's,MY_HOST=localhost,MY_HOST=database,' configuration.cnf
 RUN sed -i.bak 's,MY_DB=<MySQL database name>,MY_DB=mqaf,' configuration.cnf
 RUN sed -i.bak 's,MY_USER=<MySQL user name>,MY_USER=mqaf,' configuration.cnf
 RUN sed -i.bak 's,MY_PASSWORD=<MySQL password>,MY_PASSWORD=mqaf,' configuration.cnf
+RUN echo "dockerized=true" >> configuration.cnf
 
 # RUN mkdir config metadata-qa \
 #  && echo dir=metadata-qa > configuration.cnf \

@@ -21,6 +21,7 @@ abstract class BaseTab implements Tab {
   protected $measurements;
   protected $schemaConfiguration;
   protected $reportPath;
+  protected $dockerized;
 
   public function __construct() {
     $this->configuration = parse_ini_file("configuration.cnf", false, INI_SCANNER_TYPED);
@@ -39,6 +40,8 @@ abstract class BaseTab implements Tab {
     } else {
       $this->db = new IssuesDB($this->outputDir);
     }
+    $this->dockerized = $this->configuration['dockerized'] ?? false;
+    error_log('dockerized: ' . (int) $this->dockerized);
 
     $this->reportPath = $_SERVER['REQUEST_URI'];
     if ($this->reportPath != '')
