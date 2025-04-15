@@ -2,6 +2,9 @@
 FROM php:8.1-apache
 
 ENV REPORT_PATH="/mqaf"
+ENV RUN_USER=nobody
+ENV RUN_GROUP=0
+
 
 # install locales, gettext, zip, yaml
 RUN apt-get update \
@@ -28,16 +31,16 @@ USER www-data
 WORKDIR /var/www/html
 
 # TODO: chown www-data
-COPY composer.json .
-COPY common-functions.php .
-COPY index.php .
-COPY .htaccess .
-COPY classes classes
-COPY locale locale
-COPY js js
-COPY styles styles
-COPY templates templates
-COPY configuration.cnf.template configuration.cnf
+COPY --chown=${RUN_USER}:${RUN_GROUP} composer.json .
+COPY --chown=${RUN_USER}:${RUN_GROUP} common-functions.php .
+COPY --chown=${RUN_USER}:${RUN_GROUP} index.php .
+COPY --chown=${RUN_USER}:${RUN_GROUP} .htaccess .
+COPY --chown=${RUN_USER}:${RUN_GROUP} classes classes
+COPY --chown=${RUN_USER}:${RUN_GROUP} locale locale
+COPY --chown=${RUN_USER}:${RUN_GROUP} js js
+COPY --chown=${RUN_USER}:${RUN_GROUP} styles styles
+COPY --chown=${RUN_USER}:${RUN_GROUP} templates templates
+COPY --chown=${RUN_USER}:${RUN_GROUP} configuration.cnf.template configuration.cnf
 
 RUN composer install --prefer-dist --no-dev
 RUN composer clear-cache
