@@ -22,6 +22,7 @@ abstract class BaseTab implements Tab {
   protected $schemaConfiguration;
   protected $reportPath;
   protected $dockerized;
+  protected $aqindaReportPath = '';
 
   public function __construct() {
     $this->configuration = parse_ini_file("configuration.cnf", false, INI_SCANNER_TYPED);
@@ -41,6 +42,7 @@ abstract class BaseTab implements Tab {
       $this->db = new IssuesDB($this->outputDir);
     }
     $this->dockerized = $this->configuration['dockerized'] ?? false;
+    $this->aqindaReportPath = getenv('REPORT_PATH') ?? '';
     error_log('dockerized: ' . (int) $this->dockerized);
 
     $this->reportPath = $_SERVER['REQUEST_URI'];
@@ -59,7 +61,9 @@ abstract class BaseTab implements Tab {
     $smarty->assign('tab', $tab);
     $smarty->assign('subdirs', $this->subdirs);
     $smarty->assign('subdir', $this->subdir);
-    $smarty->assign('host', $this->dockerized ? '' : $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
+    $smarty->assign('host', $this->dockerized
+      ? $this->aqindaReportPath . '/'
+      : $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
     // $smarty->assign('filename', trim(file_get_contents($this->getFilePath('filename'))));
     // $smarty->assign('count', intval(trim(file_get_contents($this->getFilePath('count')))));
 
