@@ -1,7 +1,5 @@
-<p>
-  <a href="." class="header-link"><img src="{$host}/styles/aqinda-logo.png" class="hidden-xs hidden-sm"></a>
-</p>
 <h1 style="text-align: right">
+  <a href="." class="header-link"><img src="{$host}/styles/aqinda-logo.png" class="hidden-xs hidden-sm" width="400"></a>
   <i class="fa fa-cogs" aria-hidden="true"></i> <span>{_('metadata quality assessment dashboard')}</span>
 </h1>
 

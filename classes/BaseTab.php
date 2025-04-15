@@ -43,7 +43,6 @@ abstract class BaseTab implements Tab {
     }
     $this->dockerized = $this->configuration['dockerized'] ?? false;
     $this->aqindaReportPath = getenv('REPORT_PATH') ?? '';
-    error_log('dockerized: ' . (int) $this->dockerized);
 
     $this->reportPath = $_SERVER['REQUEST_URI'];
     if ($this->reportPath != '')
@@ -62,7 +61,7 @@ abstract class BaseTab implements Tab {
     $smarty->assign('subdirs', $this->subdirs);
     $smarty->assign('subdir', $this->subdir);
     $smarty->assign('host', $this->dockerized
-      ? $this->aqindaReportPath . '/'
+      ? $this->aqindaReportPath
       : $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
     // $smarty->assign('filename', trim(file_get_contents($this->getFilePath('filename'))));
     // $smarty->assign('count', intval(trim(file_get_contents($this->getFilePath('count')))));
@@ -72,7 +71,6 @@ abstract class BaseTab implements Tab {
     // $smarty->assign('variability', readCsv($this->getFilePath('variability.csv'), 'field', FALSE));
     $smarty->assign('lastUpdate', ''); // $this->db->fetchValue($this->db->getLastUpdate(), 'last_update'));
 
-    error_log('start');
     $all_schemas = $this->db->fetchAssoc($this->db->listSchemas(), 'metadata_schema');
     $all_providers = $this->db->fetchAssoc($this->db->listProviders());
     $all_sets = $this->db->fetchAssoc($this->db->listSets());
